@@ -1,0 +1,295 @@
+<div class="dataTables_wrapper">
+                <div detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1">
+                  <p-dataTable  [value]="data"
+                  class="row-border homeTable hover"
+                  reorderableColumns="true"
+                  resizableColumns="true"
+                  [responsive]="true"
+                  selectionMode="multiple"
+                  [loading]="loading" 
+                  displaySelectedLabel="false"
+                  [globalFilter]="gb"
+                  [(selection)]="selectedRowsArr" 
+                  [emptyMessage]="'Aucun Enregistrement Trouvé'"
+                  (onFilter)="filtrage($event)"
+                  #dt 
+                  [totalRecords]="totalRecords"
+                  [ngClass]="{'menuUp': this.data.length >=13}"
+                  scrollable="true" scrollHeight="70vh" 
+                  sortField="nom" sortOrder="1"  
+                  >
+                      <p-header class="clearfix">
+                              <div class="row">
+                                      <div class="elemLngt col-md-3 listActionfirst">
+                                              <h6>
+                                                      <span>Eléments</span>
+                                                      <span class="badge badge-secondary">{{this.dataUsers.length}}</span>
+                                              </h6>
+                                      </div>
+                                      <div class="btnControl col-md-6">
+                                              <header class="second-header clearfix">
+                                                      <div class="Files-section">
+                                                              <div class="content-second-header">
+                                                                      
+                                                                      <div class="list-action">
+                                                                              <div class="btn btnTblControl" id="tstBtnConsulter" >
+                                                                                      <button class="btn btn-secondary" [disabled]="selectedRowsArr.length != 1" (click)="consultProfile(selectedRowsArr[0])">
+                                                                                              <i class="material-icons">&#xE85E;</i>
+                                                                                              <span>
+                                                                                                      Consulter
+                                                                                              </span>    
+                                                                                      </button>
+                                                                               </div>
+              
+                                                                               <div class="dropdown btn btnTblControl">
+                                                                                      <button class="dropdown-toggle btn btn-secondary" type="button" id="tstBtnExptGeneral" data-toggle="dropdown" aria-haspopup="true"
+                                                                                              aria-expanded="true">  
+                                                                                              <i class="material-icons">&#xE255;</i>
+                                                                                              <span>Exporter</span>				
+                                                                                      </button>
+                                                                                      <nav class="dropdown-menu second-head " aria-labelledby="tstBtnExptGeneral">
+                                                                                              <li class="dropdown-item" id="tstBtnExptAMF" (click)="exportAMFFunction()"  *ngIf="this.checkExporter()">
+                                                                                                      <i class="material-icons">&#xE2C6;</i>Exporter AMF
+                                                                                              </li>
+                                                                                      </nav>
+                                                                              </div>
+                                                                              <div id="tstBtnAjouterUsr" class="btn btn-secondary add-folder" title="Créer utilisateur" *ngIf="this.checkCreation()" [routerLink]="['/angular/utilisateurs/addUser']">
+                                                                                      <i class="material-icons">&#xE7FE;</i>
+                                                                              </div> 
+              
+              
+              
+                                                                              
+                                                                              <div class="dropdown actions">
+                                                                                      <button  [disabled]="selectedRowsArr.length <1" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                                              aria-expanded="true">
+                                                                                                      ...
+                                                                                      </button>
+                                                                                      <nav class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                                                              <!-- <li  id="tstBtnActions" class="dropdown-header">Actions</li> -->
+                                                                                       
+              
+                                                                                              <li class="dropdown-item"  id="tstBtnActiver" *ngIf="this.SelectedRowIsInactif()">
+                                                                                                      <i class="material-icons second-head-ico">&#xE834;</i>Activer
+                                                                                              </li>
+                                                                                              
+                                                                                              <li class="dropdown-item"  id="tstBtnDesactiver" *ngIf="this.SelectedRowIsActif()" (click)="confirmDeactivate()" >
+                                                                                                      <i class="fa fa-ban"></i>
+                                                                                              Désactiver</li>
+                                                                                              <li class="dropdown-item"  id="tstBtnSupprimer" (click)="confirmDelete()" *ngIf="this.checkDelete()">
+                                                                                                       <i class="fa fa-user-times"></i>Supprimer
+                                                                                              </li>
+                                                                                              <li class="dropdown-item"   id="tstBtnPushmail"  (click)="pushmail()" ><i class="fa fa-envelope"></i>Pushmail</li>
+                                                                                              <li class="dropdown-item"  id="tstBtnPushmail"  *ngIf="this.checkUserInProgress()" (click)="confirmDeleteUserInProgress()" ><i class="material-icons second-head-ico">&#xE909;</i>Supprimer (En cours d'inscription)</li>
+                                                                                      </nav>
+                                                                              </div>
+                                                                      </div>
+                                                                      
+                                                                  
+                                                              </div> 
+                                                              <p-confirmDialog  responsive="true" #cd>
+                                                                      <p-footer>
+                                                                              <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                                                                      <button type="button" label="Annuler" (click)="cd.reject()"  class="btn btn-danger">Annuler</button>
+                                                                                      <button type="button" label="OK" (click)="cd.accept()"  class="btn btn-primary">Confirmer</button>
+                                                                              </div>
+                                                                      </p-footer> 
+              
+                                                              </p-confirmDialog>
+              
+                                                      </div>
+                                              </header>
+                                              <!-- End header main container -->
+                                      </div>
+                                      <div class="searchUi col-md-3">
+                                              <input #gb type="text" pInputText size="50" placeholder="Global Filter" id="tstInputSearch">
+                                              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                      </div>                        
+                              </div>
+              
+                      </p-header>
+                      <p-column  [style]="{'width':'30px','text-align':'center'}" selectionMode="multiple" [resizable]="false"></p-column>
+                      <p-column header="Action" [style]="{'overflow':'visible','width':'77px','text-align':'center'}" [resizable]="false">
+                              <ng-template let-cols let-row="rowData" pTemplate="body">
+                                      <span>
+                                              <div class="dropdown actions">
+                                                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                      aria-expanded="false" >
+                                                              </button>
+                                                              <nav class="dropdown-menu second-head actionToUp" aria-labelledby="dropdownMenu1">
+                                                                      <li id="tstBtnActiver" *ngIf="!row.etat" class="dropdown-item">
+                                                                                      <i class="material-icons second-head-ico">&#xE834;</i>
+                                                                                      Activer
+                                                                      </li>
+                                                                      
+                                                                      <li class="dropdown-item" id="tstBtnDesactiver" *ngIf="row.etat" (click)="confirmDeactivate()" >
+                                                                              <i class="fa fa-ban"></i>Désactiver
+                                                                      </li>
+                                                                      <li class="dropdown-item" id="tstBtnSupprimer" (click)="confirmSimpleDelete(row)" *ngIf="this.checkDelete()">
+                                                                                      <i class="fa fa-user-times"></i>Supprimer
+                                                                      </li>
+                                                                      <li class="dropdown-item" id="tstBtnPushmail"  (click)="pushmail()" ><i class="fa fa-envelope"></i>Pushmail</li>
+                                                              </nav>
+                                              </div>
+                                      </span>
+                              </ng-template>
+                      </p-column>
+              
+                          <p-column  field="nom" header="Nom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" >
+                          </p-column>
+              
+                     
+              
+                          <p-column  field="prenom" header="Prénom" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" ></p-column>
+                          <p-column  field="fonction" header="Fonction" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" ></p-column>
+                          <p-column  field="profil" header="Profil" [filter]="true" filterMatchMode="equals">
+                                  <ng-template pTemplate="filter" let-col>
+                                          <p-dropdown [options]="profil" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                  </ng-template>
+                          </p-column>
+              
+                          <p-column  field="statutSignature" header="Statut Signature" [sortable]="true" [filter]="true" filterMatchMode="equals">
+                                  <ng-template pTemplate="filter" let-col>
+                                          <p-dropdown [options]="statutSignature" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                  </ng-template>
+                          </p-column>
+              
+                          <p-column  field="referent" header="Référent"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" ></p-column>
+                          <p-column  field="etat" header="Etat"  [sortable]="true" [filter]="true" filterMatchMode="equals" >
+                                  <ng-template pTemplate="filter" let-col>
+                                          <p-dropdown [options]="etat" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                  </ng-template>
+                                  <ng-template let-cols let-row="rowData" pTemplate="body">
+                                              <span>
+                                                  {{ (row.etat ? 'Actif' : 'Inactif') }}
+                                              </span>
+                                 </ng-template>
+                    
+                                </p-column>
+                               
+                    
+                                <p-column  field="condition" header="Condition" [sortable]="true" [filter]="true" filterMatchMode="equals" >
+                                        <ng-template pTemplate="filter" let-col>
+                                                <p-dropdown [options]="condition" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                                        </ng-template>
+                    
+                                </p-column>
+                                <p-column  field="adresseMail" header="Adresse email" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" ></p-column>
+                              </p-dataTable>
+                        <div class="infinit-scroll" *ngIf="showInfinitScroll" (click)='loadMore()' id="infinit-scroll">
+                            <p><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>afficher {{selectedRowsArrNumber}} resultats de +</p>
+                        </div>
+                      </div>
+                    </div>
+                    <p-dialog  [(visible)]="messageDisplayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+                            <p-header>
+                                    <i class="fa fa-exclamation-triangle"></i> Erreur lors de la suppression
+                            </p-header>
+                            <div class="ui-grid ui-grid-responsive ui-fluid">
+                              Impossible de supprimer ce(s) utilisateur(s), veuillez vérifier svp : <br>
+                              - Il(s) est (sont)  désactivé(s)  <br>
+                              - La date de désactivation dépasse les 5 ans <br>
+                              - Il(s) est (sont) réferent(s) <br>
+                            </div>
+                            <p-footer>
+                                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                    <button type="button" class="btn btn-primary" (click)="messageDisplayDialog = false" >Ok</button>
+                                </div>
+                            </p-footer>
+                    </p-dialog>
+                    <p-dialog *ngIf="showProfil"  [(visible)]="showProfil" [rtl]="true" [responsive]="true" showEffect="fade" [modal]="true" [closable]="false">
+                              <p-header class="clearfix">
+                                      <div *ngIf="!modify" class="leftHeader">
+                                              <i class="fa fa-user"></i> Consultation                                
+                                      </div>
+                                      <div *ngIf="modify" class="leftHeader">
+                                              <i class="fa fa-edit"></i> Modification                                
+                                      </div>
+                              </p-header>
+                              <div class="ui-grid ui-grid-responsive ui-fluid">
+                                      <div *ngIf="displayWorkflow" class="form-group">
+                                              <h3>Workflow de la signature</h3>
+                                               <div class="stepCont">
+                                                      <p-steps styleClass="steps-custom" [(activeIndex)]="activeIndex" [model]="items"></p-steps>
+                                              </div>  
+                                               
+                                      </div>
+                                      <br/>
+                                      <app-dynamic-form [groups]="listGroupInputs" (formValid)="onValid($event)" (formChanged)="onformChanged($event)"  (showPopup)="onShowPopup($event)" (formSubmited)="onSubmit($event)"></app-dynamic-form>
+                                      <br>
+                              </div>
+                              
+                              <p-footer>
+                                      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                              <!-- <button type="button" (click)="showProfil = false" >OK</button> -->
+                                              <button *ngIf="!modify" type="button"  (click)="showProfil = false; modify = false" class="btn btn-secondary"> Annuler</button>
+                                              <button *ngIf="!modify" type="button"  (click)="editProfile()" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i> Modifier</button>
+                                              <button *ngIf="modify" type="button"  (click)="showProfil = false; modify = false" class="btn btn-secondary"> Annuler</button>
+                                              <button *ngIf="modify" type="button" [disabled]="this.myFormApp.disabled || disabled" (click)="callChild()" class="btn btn-primary"><i class="fa fa-refresh"></i> Valider</button>
+                                      </div>
+                              </p-footer>
+                      </p-dialog>
+                      <p-dialog  [(visible)]="updateUserDisplay" [responsive]="true" showEffect="fade" [modal]="true" [closable]="false">
+                              <p-header>
+                                      <span *ngIf="!updateSucces"><i class="fa fa-exclamation-triangle"></i> Erreur lors de la modification</span>
+                                      <span *ngIf="updateSucces"> La modification est effectuée</span>
+                              </p-header>
+                              <div *ngIf="!updateSucces" class="ui-grid ui-grid-responsive ui-fluid">
+                                La modification de cet utilisateur n'est pas effectuée : <br>
+                                - Le numéro de mobile ou/et l'adresse mail existe déjà !
+                              </div>
+                              <div *ngIf="updateSucces" class="ui-grid ui-grid-responsive ui-fluid">
+                                      La modification de cet utilisateur est effectuée avec succès : <br>
+                                      - Un mail est envoyé à cet utilisateur pour l'informer de la modification de ses données  !
+                                    </div>
+                              <p-footer>
+                                  <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                      <button type="button" class="btn btn-primary" (click)="updateTable()" > Ok</button>
+                                  </div>
+                              </p-footer>
+                      </p-dialog>
+                      <p-dialog  [(visible)]="deleteDialog" [responsive]="true" [width]="500" showEffect="fade" [modal]="true" [closable]="false">
+                              <p-header>
+                                      <span><i class="fa fa-exclamation-triangle"></i> Erreur lors de la suppression</span>
+                              </p-header>
+                              <div  class="ui-grid ui-grid-responsive ui-fluid">
+                                      {{(this.notDeletedUsers.length>1 ?
+                                         'Ces utilisateurs sont référents. Ils sont encore associés à d’autres utilisateurs et ne peuvent donc pas être supprimés : ' :
+                                         'Cet utilisateur est référent. Il est encore associé à d’autres utilisateurs et ne peut donc pas être supprimé : ')}}
+                                      <ul>
+                                              <li *ngFor="let user of notDeletedUsers">{{user.nom + ' ' + user.prenom}}</li>
+                                      </ul>
+                              </div>
+                              <p-footer>
+                                  <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                      <button type="button" class="btn btn-primary" (click)="deleteDialog = false" > Ok</button>
+                                  </div>
+                              </p-footer>
+                      </p-dialog>
+                      <p-dialog header="Ajouter un projet" [(visible)]="this.addProjectDisplayDialog"  [responsive]="true" showEffect="fade" [modal]="true">
+                              <div class="ui-grid ui-grid-responsive ui-fluid">
+                                <input type="text"  #nomProjet id="projetToAdd" placeholder="Entrez le nom du projet">
+                                </div>
+                                <p-footer>
+                                      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                          <button type="button" class="btn btn-danger" (click)="cancelProjectDisplayDialog()" >Annuler</button>
+                                          <button type="button" class="btn btn-primary" (click)="addProject(nomProjet.value)" >Confirmer</button>
+                                      </div>
+                                  </p-footer>
+                                  <div class="invalid-feedback" *ngIf="projetInexist()">{{creationProjetError}}</div>
+                  
+                      </p-dialog>
+                      <p-dialog header="Confirmation de la suppression" [(visible)]="deleteInProgressUsers" [responsive]="true" showEffect="fade" [modal]="true">
+                              <div class="ui-grid ui-grid-responsive ui-fluid">
+                                      <span>{{deleteUsersMsg}}</span>
+                                      <ul>
+                                              <li *ngFor="let user of selectedRowsArr">{{user.nom + ' ' +  user.prenom}}</li>
+                                      </ul>
+                              </div>
+                              <p-footer>
+                                  <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                                      <button type="button" class="btn btn-danger" (click)="deleteInProgressUsers = false" > Annuler</button>
+                                      <button type="button" class="btn btn-primary" (click)="deleteUsersInProgress()" >Confirmer</button>
+                                  </div>
+                              </p-footer>
+                      </p-dialog>

@@ -1,0 +1,224 @@
+<div class="dataTables_wrapper">
+  <div detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1">  
+          <p-dataTable  [value]="dataDIS"
+          class="row-border homeTable hover"
+          reorderableColumns="true"
+          resizableColumns="true"
+          [responsive]="true"
+          selectionMode="multiple"
+          [(selection)]="selectedRows"
+          [loading]="loading" displaySelectedLabel="false"
+          [globalFilter]="gb"
+          [emptyMessage]="'Aucun Enregistrement Trouvé'"
+          sortMode="multiple" 
+          dataKey="id"
+          scrollable="true" scrollHeight="70vh"
+          #dt>
+          <p-header class="clearfix">
+          <div class="row">
+                  <div class="elemLngt col-md-2">
+                  <span class="badge badge-light">{{this.dataSourceDIS.length}} Elements</span>
+                  </div>
+                  <div class="btnControl col-md-6">
+                          <header class="second-header clearfix">
+                                  <div class="Files-section">
+                                          <div class="content-second-header">
+                                                  
+                                                  <div class="list-action">
+                                                        <div class="btn btnTblControl" id="tstBtnConsulter">
+                                                                <button (click)="confirmModification()" [disabled]="modificationList.length < 1">
+                                                                        <i class="material-icons">&#xE923;</i>Soumettre mise à jour
+                                                                </button>
+                                                        </div>
+                                                          <div class="dropdown actions">
+                                                                  <button [disabled]="selectedRows.length <1 "class="btn btn-default dropdown-toggle btn-blue" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                          aria-expanded="true">
+                                                                                  ...
+                                                                  </button>
+                                                                  <ul class="dropdown-menu second-head " aria-labelledby="dropdownMenu1">
+                                                                          <li class="dropdown-header">Actions</li>
+                                                                          <li><a href="javascript:void(0)" (click)="activateListDIS()">
+                                                                                          <i class="fa fa-check-circle-o"></i>Activer
+                                                                                  </a>
+                                                                          </li>
+                                                                          <li><a href="javascript:void(0)" (click)="deactivateListDIS()">
+                                                                                          <i class="fa fa-ban"></i>Désactiver
+                                                                                  </a>
+                                                                          </li>
+                                                                  </ul>
+                                                          </div>
+                                                  </div>
+                                          </div> 
+
+                                          <div class="col-xs-2 dropdown btn-blue-second-header">
+                                                  <button class="btn btn-default dropdown-toggle btn-blue" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                          aria-expanded="true">...
+                                                  </button>
+                                                  <ul class="dropdown-menu second-head" aria-labelledby="dropdownMenu1">
+                                                                  <li>
+                                                                      <a href="javascript:void(0)" (click)="activateListDIS()">
+                                                                            <i class="fa fa-check-circle-o"></i>Activer
+                                                                      </a>
+                                                                  </li>
+                                                                  <li>
+                                                                      <a href="javascript:void(0)" (click)="deactivateListDIS()">
+                                                                            <i class="fa fa-ban"></i>Désactiver
+                                                                      </a>
+                                                                  </li>
+                                                  </ul>
+                                          </div>
+                                  </div>
+                          </header>
+                          <!-- End header main container -->
+                  </div>
+
+                  <div class="searchUi col-md-3 col-xs-12">
+                          <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+                          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                  </div>                        
+          </div>
+
+          </p-header>
+                <p-column  [style]="{'width':'30px','text-align':'center'}" selectionMode="multiple" [resizable]="false"></p-column>
+                <p-column header="Action" [style]="{'overflow':'visible','width':'55px','text-align':'center'}"
+                [resizable]="false">
+                        <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                                <div class="dropdown actions">
+                                <button class="btn dropdown-toggle btn-blue" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" >
+                                </button>
+                                <ul class="dropdown-menu second-head " aria-labelledby="dropdownMenu1">
+                                <li>
+                                        <a (click)="activateOneDIS(row)">
+                                        <i class="fa fa-check-circle-o"></i>
+                                        Activer
+                                        </a>
+                                </li>
+                                <li >
+                                        <a (click)="deactivateOneDIS(row)">
+                                        <i class="fa fa-ban"></i>
+                                        Désactiver
+                                        </a>
+                                </li>
+                                <li>
+                                        <a (click)="consultDIS(row)">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                        Modifier
+                                        </a>
+                                </li>
+                        </ul>
+                                </div>
+                        </span>
+                        </ng-template>
+                </p-column>
+                <p-column field="id" [hidden]="true"></p-column>
+                <p-column  field="nom" header="Nom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'nom')">
+                                {{ row.nom }}
+                        </span>
+                </ng-template>
+                </p-column>
+                <p-column  field="prenom" header="Prenom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'prenom')">
+                                {{ row.prenom }}
+                        </span>
+                </ng-template>
+                </p-column>
+                <p-column  field="fonction" header="Fonction"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'fonction')">
+                                {{ row.fonction }}
+                        </span>
+                </ng-template>
+                </p-column>
+                <p-column  field="statutSignature" header="Statut Signature" [sortable]="true" [filter]="true" filterMatchMode="equals">
+                <ng-template pTemplate="filter" let-col>
+                        <p-dropdown [options]="statutsSignature" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                </ng-template>
+                </p-column>
+                <p-column  field="referent" header="Référent"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                <span  [style.color]="getRowColumnColor(row, 'referent')">
+                                        {{ row.referent.nom + ' ' + row.referent.prenom }}
+                                </span>
+                        </ng-template>
+                </p-column>                  
+                <p-column  field="etat" header="Etat"  [sortable]="true" [filter]="true" filterMatchMode="equals" >
+                    <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="etats" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                    </ng-template>
+                    <ng-template let-cols let-row="rowData" pTemplate="body">
+                                <span>
+                                    {{ (row.etat ? 'Actif' : 'Inactif') }}
+                                </span>
+                    </ng-template>
+                </p-column>
+                <p-column  field="adresseMail" header="Adresse email" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" >
+                        <ng-template let-cols let-row="rowData" pTemplate="body">
+                                <span [style.color]="getRowColumnColor(row, 'adresseMail')">
+                                    {{ row.adresseMail }}
+                                </span>
+                        </ng-template>
+                </p-column>
+                <p-column  field="numeroMobile" header="Numero mobile" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" >
+                        <ng-template let-cols let-row="rowData" pTemplate="body">
+                                <span [style.color]="getRowColumnColor(row, 'numeroMobile')">
+                                    {{ row.numeroMobile }}
+                                </span>
+                        </ng-template>
+                </p-column>
+                <p-column  field="designePar" header="Désigné par"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" filterMatchMode="contains" >
+                          <ng-template let-cols let-row="rowData" pTemplate="body">
+                                        <span [style.color]="getRowColumnColor(row, 'designePar')">
+                                            {{ row.designePar.nom + ' ' + row.designePar.prenom }}
+                                        </span>
+                           </ng-template>
+                </p-column>
+          </p-dataTable>
+          <div class="infinit-scroll" *ngIf="showInfinitScroll" (click)='loadMore()'>
+          <p><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>afficher {{selectedRowsArrNumber}} resultats de +</p>
+          </div>
+  </div> 
+          
+</div>
+<p-dialog *ngIf="showProfil"  [(visible)]="showProfil" [rtl]="true" [responsive]="true" showEffect="fade" [modal]="true" [closable]="false">
+        <p-header class="clearfix">
+                <div class="leftHeader">
+                        <i class="fa fa-edit"></i> Modification                                
+                </div>
+        </p-header>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+                <br/>
+                <app-dynamic-form [groups]="listGroupInputs" (formValid)="onValid($event)" (formSubmited)="onSubmit($event)"></app-dynamic-form>
+                <br>
+        </div>
+        
+        <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                        <!-- <button type="button" (click)="showProfil = false" >OK</button> -->
+                        <button  type="button"  (click)="showProfil = false; modify = false" class="btn btn-secondary"> Fermer</button>
+                        <button  *ngIf="modify" type="button" [disabled]="this.myFormApp.disabled || disabled" (click)="callChild()" class="btn btn-primary"> Valider</button>
+                </div>
+        </p-footer>
+</p-dialog>
+<p-dialog header="Confirmation de la soumission" [(visible)]="confirmationDialog" [responsive]="true" showEffect="fade" [modal]="true">
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+                <span>{{message}}</span>
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button *ngIf="!confirmationSubmit" type="button" class="btn-danger" (click)="confirmationDialog=false;" > ANNULER</button>
+                <button *ngIf="!confirmationSubmit" type="button" class="btn-success" (click)="submitModifications()" > CONFIRMER</button>
+                <button *ngIf="confirmationSubmit" type="button" class="btn-success" (click)="confirmationDialog=false; confirmationSubmit=false;" > OK</button>
+            </div>
+        </p-footer>
+</p-dialog>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+        <p-footer>
+                <button class="btn btn-secondary" type="button" pButton icon="fa-close" label="Annuler" (click)="cd.reject()"></button>
+                <button class="btn btn-primary" type="button" pButton icon="fa-check" label="OK" (click)="cd.accept()"></button>
+            </p-footer>
+</p-confirmDialog>

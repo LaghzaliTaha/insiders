@@ -1,0 +1,142 @@
+<div class="dataTables_wrapper">
+        <div detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1">  
+                <p-dataTable  [value]="dataReferents"
+                class="row-border homeTable hover"
+                reorderableColumns="true"
+                resizableColumns="true"
+                [responsive]="true"
+                selectionMode="multiple"
+                [(selection)]="rows"
+                [loading]="loading" displaySelectedLabel="false"
+                [globalFilter]="gb"
+                [emptyMessage]="'Aucun Enregistrement Trouvé'"
+                sortMode="multiple" 
+                (onRowSelect)="checkDisabled($event)"
+                (onRowUnselect)="checkDisabled($event)"
+                dataKey="id"
+                scrollable="true" scrollHeight="70vh"
+                [ngClass]="{'menuUp': this.dataReferents.length >=13}"
+                #dt>
+
+                        <p-header class="clearfix">
+                                <div class="row">
+                                        <div class="elemLngt col-md-4 listActionfirst">
+                                                <h6>
+                                                        <span>Eléments</span>
+                                                        <span class="badge badge-secondary">{{this.dataReferents.length}}</span>
+                                                </h6>
+                                        </div>
+                                        <div class="btnControl col-md-5">
+                                                <header class="second-header clearfix">
+                                                        <div class="Files-section">
+                                                                <div class="content-second-header">
+                                                                        <div class="list-action">
+                                                                                <div class="btn btnTblControl" id="tstBtnConsulter" >
+                                                                                        <button [disabled]="enabledSelect===false" class="btn btn-secondary">
+                                                                                                <i class="material-icons">&#xE85E;</i>
+                                                                                                <span>Consulter</span>
+                                                                                        </button>
+                                                                                </div>
+                                                                                
+                                                                                <div class="dropdown actions">
+                                                                                        <button [disabled]="rows.length <1 " class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                                                aria-expanded="true">
+                                                                                                        ...
+                                                                                        </button>
+                                                                                        <nav class="dropdown-menu second-head " aria-labelledby="dropdownMenu1">
+                                                                                                <li class="dropdown-item">
+                                                                                                        <i class="material-icons second-head-ico">&#xE7F5;</i>
+                                                                                                        Notifier
+                                                                                                </li>
+                                                                                                <li class="dropdown-item">
+                                                                                                        <i class="material-icons">&#xE042;</i>Relancer
+                                                                                                </li>
+                                                                                        </nav>
+                                                                                </div>
+                
+                                                                        </div>
+                                                                </div> 
+                                                        </div>
+                                                </header>
+                                        </div>
+                                        <div class="searchUi col-md-3">
+                                                <input #gb type="text" pInputText size="50" placeholder="Global Filter" id="tstInputSearch">
+                                                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                        </div>                        
+                                </div>
+                        </p-header>
+                        <p-column  [style]="{'width':'30px','text-align':'center'}" selectionMode="multiple" [resizable]="false"></p-column>
+                        <p-column header="Action" [style]="{'overflow':'visible','width':'77px','text-align':'center'}"
+                        [resizable]="false">
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                <span>
+                                <div class="dropdown actions">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" >
+                                        </button>
+                                        <nav class="dropdown-menu second-head actionToUp" aria-labelledby="dropdownMenu1">
+                                                <li class="dropdown-item" *ngIf="row.etat" (click)="consulterInit(row.id,row.nom,row.profil)">
+                                                                <i class="material-icons">&#xE2C8;</i>
+                                                                Consulter ses initiés
+                                                </li>
+                                                <li class="dropdown-item" (click)="versionsDocument(row)">
+                                                        <i class="material-icons">&#xE7FD;</i>
+                                                        <span translate>Infos référent</span>
+                                                </li>
+                                                <li (click)="shareMail('identified')" class="dropdown-item">
+                                                        <i class="material-icons second-head-ico">&#xE7F5;</i>
+                                                        Notifier
+                                                </li>
+                                                <li class="dropdown-item"  (click)="shareMail('identified')">
+                                                        <i class="material-icons">&#xE042;</i>
+                                                        Relancer 
+                                                </li>
+                                        </nav>
+                                </div>
+                                </span>
+                                </ng-template>
+                        </p-column>
+                        <p-column field="id" [hidden]="true">
+                        </p-column>
+                        <p-column  field="nom" header="Nom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" ></p-column>
+                        <p-column  field="prenom" header="Prenom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" ></p-column>
+                        <p-column  field="fonction" header="Fonction"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" ></p-column>
+                        <p-column  field="profil" header="Profil"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" ></p-column>
+                        <p-column  field="etat" header="MAJ Liste"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                        <span>
+                                                {{ (row.etat? 'MAJ à valider' : 'Demande MAJ') }}
+                                        </span>
+                                </ng-template>
+                        </p-column>
+                        <p-column  field="dateMaj" header="Depuis le "  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                        <span>
+                                                {{ (row.dateMaj | date:'dd/MM/yyyy') }}
+                                        </span>
+                                </ng-template>
+                        </p-column>
+                        <p-column  field="dateRelance" header="Date de relance"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                                <span>
+                                                        {{ (row.dateRelance | date:'dd/MM/yyyy') }}
+                                                </span>
+                                        
+                                </ng-template>
+
+                        </p-column>
+                        <p-column  field="dateNotif" header="Date de Notification"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                                <span>
+                                                        {{ (row.dateNotif | date:'dd/MM/yyyy') }}
+                                                </span>
+                                </ng-template>
+
+                        </p-column>
+                </p-dataTable>
+                <div class="infinit-scroll" *ngIf="showInfinitScroll" (click)='loadMore()'>
+                <p><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>afficher {{rowsNumber}} resultats de +</p>
+                </div>
+        </div> 
+                
+</div>

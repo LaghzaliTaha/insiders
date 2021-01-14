@@ -1,0 +1,30 @@
+<div [formGroup]="form" class="form-group">
+  <label [attr.for]="input.key">{{input.label}}</label>
+
+  <div [ngSwitch]="input.controlType">
+
+
+    <input *ngSwitchCase="'textbox'" [formControlName]="input.key"
+    [id]="input.key" [type]="input.type" [value]="input.value" class="form-control form-control-sm" [readonly]="input.editable" [placeholder]="setPlaceHolder(input.key)">
+
+    <select [id]="input.key"   class="form-control form-control-sm" *ngSwitchCase="'dropdown'" [formControlName]="input.key" [attr.disabled]="input.editable?'':null" (ngModelChange)="onChange($event, input.key)">
+      <option *ngFor="let opt of input.options" [selected]="isSelected(opt, input.value)" [value]="opt.key">{{opt.value}}</option>
+    </select>
+
+    <select [id]="input.key" class="form-control form-control-sm"  *ngSwitchCase="'multiselect'" [formControlName]="input.key" [attr.disabled]="input.editable?'':null"  multiple>
+      <option *ngFor="let opt of input.options" [selected]="isMultipleSelected(opt, input.value)" [value]="opt.key">{{opt.value}}</option>
+    </select>
+    <button  [id]="ajoutProjet" *ngIf="input.key==='projetpilote' && !input.editable"  class="form-control form-control-sm" type="button"  (click)="onclick($event)" class="btn btn-primary submitbtn" value="ajouter">Ajouter</button>
+  
+    <input *ngSwitchCase="'checkbox'" [formControlName]="input.key" [checked]="input.value"
+            [id]="input.key" [type]="input.type" [disabled]="input.editable">
+    <div class="invalid-feedback" *ngIf="isError(input.key)">{{input.errMessage}}</div>
+
+    <p-calendar *ngSwitchCase="'datebox'"  [(ngModel)]="input.value" [locale]="fr" [formControlName]="input.key"  dateFormat="dd/mm/yy" 
+          [id]="input.key"  class=""  [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2018" [disabled]="input.editable"  [showIcon]="true"></p-calendar>
+
+        
+  </div>
+
+  <!-- <div class="errorMessage" *ngIf="!isValid">{{input.label}} is required</div> -->
+</div>

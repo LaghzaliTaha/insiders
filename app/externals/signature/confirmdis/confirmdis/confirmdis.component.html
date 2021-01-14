@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>Confirmation Signature</title>
+
+<!-- Latest compiled and minified Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+<style>
+body {
+padding-top: 1em;
+}	
+.btn-primary, .btn-primary:active {
+    background-color: #000;
+    border-color: #000;
+}
+  .signature-finish {
+    background-image: url(https://pes.docapost-bpo.com/rct/orange/assets/images/ballons.png);
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    min-height: 710px;
+}
+</style>
+<div class="container ng-scope" ui-view="">
+	<div class="container ng-scope">
+		<div class="col-sm-12 signature-finish p0">
+			<div class="col-sm-12">
+				<h2><span role="alert" translate="signature.finish.messagetitle" class="ng-scope">Votre signature a bien &eacute;t&eacute; prise en compte</span> </h2>
+					<div class="col-sm-7 p0">
+						<p translate="signature.finish.receiveContrat" class="ng-scope">Vous recevrez la version d&eacute;finitive de ce document par mail.</p> <br>
+					</div>
+				</div>
+						<div class="col-sm-12 button"><a href={{urlDownloadDoc}}><button type="button" class="btn btn-lg btn-primary" aria-label="Consulter le document" title="Consulter le document" ng-click="consultDoc()"><img src="https://pes.docapost-bpo.com/rct/orange/assets/images/file.png" alt="bouton fichier"> <span translate="signature.finish.btnSave" class="ng-scope"> <span style="color: white;">Consulter le document</span></span></button></a>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,76 @@
+<div class="card">
+  <div class="card-body">
+    <form class="form" [formGroup]="periodAddForm" (ngSubmit)="addPeriod()" novalidate>
+      
+      <div class="form-group" >
+        <label for="nomPeriode">Nom de la période</label>
+        <input type="text" class="form-control form-control-sm" formControlName="nomPeriode" id="nomPeriode" placeholder="Entrez le nom de la période" #nomPeriode>
+      </div>
+
+      <div class="form-group" >
+        <label for="typePeriode">Type de période</label>
+        <select class="form-control form-control-sm" formControlName="typePeriode" id="typePeriode" placeholder="Entrez le type de la période">
+          <option *ngFor="let type of typePeriodeList " [ngValue]="type">{{type}}</option>
+        </select>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateDebut">Date début période</label>
+        <p-calendar  [locale]="fr" class="" formControlName="dateDebut" id="dateDebut" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="periodAddForm.get('dateDebut').invalid && periodAddForm.get('dateDebut').touched">La date de début de période doit être postérieure à la date du jour </div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateFin">Date fin période</label>
+        <p-calendar  [locale]="fr" formControlName="dateFin" id="dateFin" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="allowedDateFin()">La date de fin de période doit être postérieure à la date de début de période </div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateDebutPlac">Date début placement</label>
+        <p-calendar  [locale]="fr"  formControlName="dateDebutPlac" id="dateDebutPlac" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="periodAddForm.get('dateDebutPlac').invalid && periodAddForm.get('dateDebutPlac').touched">La date de début placement doit être postérieure à la date du jour</div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateFinPlac">Date fin placement</label>
+        <p-calendar  [locale]="fr"  formControlName="dateFinPlac" id="dateFinPlac" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="allowedDateFinPlac()">La date fin placement doit être postérieure à la date de début </div>
+      </div>
+
+      <div class="form-group" >
+        <button [disabled]="addFormControl()" type="submit" class="btn btn-primary">Valider</button>
+        <button type="button" class="btn btn-danger" [routerLink]="['../']">Annuler</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<p-dialog header="Ajouter une période" [(visible)]="addPeriodDisplayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    Souhaitez-vous créer "{{this.periodAddForm.get('nomPeriode').value}}" pour les dates du "{{this.periodAddForm.get('dateDebut').value | date:'yyyy-MM-dd' }}" au "{{this.periodAddForm.get('dateFin').value | date:'yyyy-MM-dd'}}" ? 
+  </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-danger" (click)="cancel()" > Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="send()" > Confirmer</button>
+      </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Message" [(visible)]="messageDisplayDialog" [draggable]="true" 
+    [resizable]="true" modal="true" [width]="500"  (onHide)="closePopUp()">
+  
+  <div class="ui-dialog-content" style="height:126px">
+    <span style="text-align: center; font-size: 26px;">{{message}}</span>
+    <p-panel *ngIf="showErrorMessage" header="Erreurs" [toggleable]="true" [collapsed]="true" >
+        {{errorMessage}}
+      </p-panel>
+  </div>
+    
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-primary" (click)="closePopUp()" > ok</button>
+      </div>
+  </p-footer>
+</p-dialog>

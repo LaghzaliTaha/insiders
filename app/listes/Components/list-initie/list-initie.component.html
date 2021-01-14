@@ -1,0 +1,458 @@
+<div class="dataTables_wrapper">
+  <div detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1">
+    <p-dataTable  [value]="dataInitiOccaByPilote"
+    class="row-border homeTable hover"
+    reorderableColumns="true"
+    resizableColumns="true"
+    [responsive]="true"
+    selectionMode="multiple"
+    displaySelectedLabel="false"
+    [globalFilter]="gb"
+    [(selection)]="selectedRowsArr" 
+    [emptyMessage]="'Aucun Enregistrement Trouvé'"
+   
+    [ngClass]="{'menuUp': this.dataInitiOccaByPilote.length >=13}"
+    scrollable="true" scrollHeight="70vh" 
+      sortMode="multiple" #dt 
+    [totalRecords]="totalRecords">
+
+ 
+    
+    <p-header class="clearfix">
+            <div class="row">
+                    <div class="elemLngt col-md-4 listActionfirst">
+                            <h6>
+                                    <span>Initiés modifiés à valider</span>
+                                    <span class="badge badge-secondary">({{dataInitiOccaByPilote.length}})</span>
+                            </h6>
+                    </div>
+                    <div class="btnControl col-md-5">
+                            <header class="second-header clearfix">
+                                    <div class="Files-section">
+                                            <div class="content-second-header">
+                                                    <div class="list-action">
+                                                            <div class="btn btnTblControl" id="tstBtnConsulter" >
+                                                                    <button  (click)="submitModifications()" class="btn btn-secondary">
+                                                                                    <i class="material-icons">&#xE923;</i>
+                                                                                    <span>Enregiter tout</span>
+                                                                    </button>
+                                                            </div>
+                                                            <div class="btn btnTblControl" id="tstBtnConsulter" >
+                                                                <button  class="btn btn-secondary">
+                                                                                <i class="material-icons">&#xE923;</i>
+                                                                                <span>Ignorer tout</span>
+                                                                </button>
+                                                            </div>
+
+  
+                                                            <div class="dropdown actions">
+                                                                <button [disabled]="selectedRowsArr.length <1 "class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                      aria-expanded="true">
+                                                                              ...
+                                                                </button>
+                                                                <nav class="dropdown-menu second-head " aria-labelledby="dropdownMenu1">
+                                                                     <li class="dropdown-item">
+                                                                        <i class="material-icons second-head-ico">&#xE876;</i>Enregistrer ({{selectedRowsArr.length}})
+                                                                    </li>
+                                                                    <li class="dropdown-item">
+                                                                        <i class="material-icons">&#xE042;</i>Ignorer ({{selectedRowsArr.length}})
+                                                                    </li>
+        
+                                                                </nav>
+                                                            </div>
+
+                                                    </div>
+                                            </div> 
+                                    </div>
+                            </header>
+                    </div>
+                    <div class="searchUi col-md-3">
+                            <input #gb type="text" pInputText size="50" placeholder="Global Filter" id="tstInputSearch">
+                            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    </div>                        
+            </div>
+    </p-header>
+
+            <p-column  [style]="{'width':'30px','text-align':'center'}" selectionMode="multiple" [resizable]="false"></p-column>
+                        <p-column header="Action" [style]="{'overflow':'visible','width':'55px','text-align':'center'}"
+                        [resizable]="false">
+                                <ng-template let-cols let-row="rowData" pTemplate="body">
+                                        <span>
+                                                <div class="dropdown actions">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false" >
+                                                    </button>
+                                                    <nav class="dropdown-menu second-head" aria-labelledby="dropdownMenu1">
+                                                        <li class="dropdown-item">
+                                                                <i class="fa fa-check-circle-o"></i>
+                                                                  Enregistrer
+                                                        </li>
+                                                        <li class="dropdown-item" >
+                                                                <i class="fa fa-ban"></i>
+                                                                  Ignorer
+                                                        </li>
+                                                        <li class="dropdown-item">
+                                                                <i class="fa fa-pencil-square-o"></i>
+                                                                Modifier
+                                                        </li>
+                                                    </nav>
+                                                </div>
+                                            </span>
+                                </ng-template>
+                        </p-column>
+            <p-column  field="prenom" header="Prénom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                    <span [style.color]="getRowColumnColor(row, 'prenom')" >  
+                  <span *ngIf="getRowColumnColor(row, 'prenom')!=='black'" (mouseenter)="showOverlay($event,getOldVal(row.id).nom,'02/05/2018',getRowColumnColor(row, 'prenom'),findIdChangedVal(row,'prenom'), op)">
+                      {{ row.prenom }} 
+                    </span> 
+                    <span *ngIf="getRowColumnColor(row, 'prenom')==='black'">
+                      {{getOldVal(row.id).prenom}} 
+                    </span>  
+                  </span>
+
+                </ng-template>
+            </p-column>
+            <p-column  field="nom" header="Nom"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                    <span [style.color]="getRowColumnColor(row, 'nom')" >
+                        <span *ngIf="getRowColumnColor(row, 'nom')!=='black'" (mouseenter)="showOverlay($event,getOldVal(row.id).nom,'02/05/2018',getRowColumnColor(row, 'nom'),findIdChangedVal(row,'nom'), op)">
+                          {{ row.nom }} 
+                        </span> 
+                        <span *ngIf="getRowColumnColor(row, 'nom')==='black'">
+                          {{getOldVal(row.id).nom}} 
+                        </span>  
+                      </span>
+
+                </ng-template>    
+        </p-column>
+            <p-column  field="nomNaissance" header="Nom de naissance" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                    <span [style.color]="getRowColumnColor(row, 'nomNaissance')" >
+                        <span *ngIf="getRowColumnColor(row, 'nomNaissance')!=='black'" (mouseenter)="showOverlay($event,getOldVal(row.id).nomNaissance,'02/05/2018',getRowColumnColor(row, 'nomNaissance'),findIdChangedVal(row,'nomNaissance'), op)">
+                          {{ row.nomNaissance }} 
+                        </span> 
+                        <span *ngIf="getRowColumnColor(row, 'nomNaissance')==='black'">
+                          {{getOldVal(row.id).nomNaissance}} 
+                        </span>  
+                      </span>
+
+                </ng-template>  
+            </p-column>
+            <p-column  field="adresseMail" header="Adresse email" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                    <span [style.color]="getRowColumnColor(row, 'adresseMail')" >
+                        <span *ngIf="getRowColumnColor(row, 'adresseMail')!=='black'" (mouseenter)="showOverlay($event,getOldVal(row.id).adresseMail,'02/05/2018',getRowColumnColor(row, 'adresseMail'),findIdChangedVal(row,'adresseMail'), op)">
+                          {{ row.adresseMail }} 
+                        </span> 
+                        <span *ngIf="getRowColumnColor(row, 'adresseMail')==='black'">
+                          {{getOldVal(row.id).adresseMail}} 
+                        </span>  
+                      </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="etat" header="Etat"  [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'125px'}">
+                <ng-template pTemplate="filter" let-col>
+                        <p-dropdown [options]="etats" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                </ng-template>
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                            <span>
+                                {{ (row.etat ? 'Actif' : 'Inactif') }}
+                            </span>
+                </ng-template>
+              </p-column>
+            <p-column  field="dateNaissance" header="Date de naissance" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">$
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                            <span [style.color]="getRowColumnColor(row, 'dateNaissance')" >
+                                <span *ngIf="getRowColumnColor(row, 'dateNaissance')!=='black'" (mouseenter)="showOverlay($event,getOldVal(row.id).dateNaissance,'02/05/2018',getRowColumnColor(row, 'dateNaissance'),findIdChangedVal(row,'dateNaissance'), op)">
+                                  {{(row.dateNaissance  | date:'dd/MM/yyyy')}}
+                                </span> 
+                                <span *ngIf="getRowColumnColor(row, 'dateNaissance')==='black'">
+                                  {{(getOldVal(row.id).dateNaissance | date:'dd/MM/yyyy')}} 
+                                </span>   
+                              </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="numIdentifNational" header="Num identification national" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'numIdentifNational')">
+                            {{(row.numIdentifNational | date:'dd/MM/yyyy')}}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="numPriveFixe" header="Num Privé Fixe" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'numPriveFixe')">
+                            {{ row.numPriveFixe }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="numPriveMobile" header="Num Privé Mobile" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'numPriveMobile')">
+                            {{ row.numPriveMobile }}
+                        </span>
+                </ng-template>  
+            </p-column>
+
+
+
+
+            <p-column  field="profil" header="Profil" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'profil')">
+                            {{ row.profil }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="condition" header="Condition" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'condition')">
+                            {{ row.condition }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="pilote.nom" header="Référent" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'pilote.nom')">
+                            {{ row.pilote.nom +' '+ row.pilote.prenom}}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="fonction" header="Fonction" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'fonction')">
+                            {{ row.fonction }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="raison" header="Raison" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'raison')">
+                            {{ row.raison }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="dateInscription" header="Début inscription" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'dateInscription')">
+                            {{(row.dateInscription  | date:'dd/MM/yyyy')}}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="dateSignature" header="Date de signature" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'dateSignature')">
+                            {{(row.dateSignature | date:'dd/MM/yyyy')}}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="dateFinInscription" header="Fin inscription" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'dateFinInscription')">
+                            {{(row.dateFinInscription  | date:'dd/MM/yyyy')}}
+                        </span>
+                </ng-template>  
+            </p-column>
+
+
+            <p-column  field="nomRuePr" header="Nom de rue Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'nomRuePr')">
+                            {{ row.nomRuePr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="numRuePr" header="Num de rue Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                                    <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'numRuePr')">
+                            {{ row.numRuePr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="complementAdressePr" header="Complément d'adresse Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'complementAdressePr')">
+                            {{ row.complementAdressePr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="villePr" header="Ville Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'villePr')">
+                            {{ row.villePr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="codePostalPr" header="Code postal Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'codePostalPr')">
+                            {{ row.codePostalPr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+            <p-column  field="paysPr" header="Pays Perso" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'paysPr')">
+                            {{ row.paysPr }}
+                        </span>
+                </ng-template>  
+            </p-column>
+
+
+
+            <p-column  field="nomEntreprise" header="Nom Entreprise" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'nomEntreprise')">
+                            {{ row.nomEntreprise }}
+                        </span>
+                </ng-template>        
+            </p-column>
+
+            <p-column  field="nomRueEnt" header="Nom de rue Ent" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'nomRueEnt')">
+                            {{ row.nomRueEnt }}
+                        </span>
+                </ng-template>     
+            </p-column>
+
+
+            <p-column  field="complementAdresseEnt" header="Complement adresse Ent" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'complementAdresseEnt')">
+                            {{ row.complementAdresseEnt }}
+                        </span>
+                </ng-template>    
+            </p-column>
+            <p-column  field="villeEnt" header="Ville Entreprise" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'villeEnt')">
+                            {{ row.villeEnt }}
+                        </span>
+                </ng-template>    
+            </p-column>
+            <p-column  field="codePostalEnt" header="Code postal Ent" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'codePostalEnt')">
+                            {{ row.codePostalEnt }}
+                        </span>
+                </ng-template>    
+            </p-column>
+            <p-column  field="paysEnt" header="Pays Entreprise" [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" [style]="{'width':'125px'}">
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span [style.color]="getRowColumnColor(row, 'paysEnt')">
+                            {{ row.paysEnt }}
+                        </span>
+                </ng-template>      
+            </p-column>
+        
+
+           
+            <!-- <p-column  field="profil" header="Profil" [filter]="true" filterMatchMode="equals">
+                    <ng-template pTemplate="filter" let-col>
+                            <p-dropdown [options]="profil" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                    </ng-template>
+            </p-column> -->
+
+           
+
+         
+                </p-dataTable>
+          <div class="infinit-scroll" *ngIf="showInfinitScroll" (click)='loadMore()' id="infinit-scroll">
+              <p><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>afficher {{selectedRowsArrNumber}} resultats de +</p>
+          </div>
+        </div>
+        <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
+            <div>
+              <div class="overHeader">
+                <p>
+                  Date modification : <span class="oldValue">
+                    <!-- {{ oldValues.soumissionListe ===undefined ? oldValues.newValue :(oldValues.soumissionListe.date_soumission  | date:'dd/MM/yyyy')}}   -->
+                    {{dateChange}}  
+                  </span>
+                </p> 
+                <p>
+                  Valeur initiale : <span class="oldValue">{{oldValues}}</span>
+                </p>
+              </div>
+              <div class="overlayFooter">
+                <button (click)="op.hide($event);validateColumn(idModification)" class="btn btn-primary">
+                  Enregistrer
+                </button>
+                <button (click)="op.hide($event);ignoreColumn(idModification)" class="btn btn-danger">
+                  Ignorer
+                </button>
+              </div>
+            </div>
+        </p-overlayPanel>   
+      
+      </div>
+
+      <p-dialog *ngIf="showProfil"  [(visible)]="showProfil" [rtl]="true" [responsive]="true" showEffect="fade" [modal]="true" [closable]="false">
+        <p-header class="clearfix">
+                <div class="leftHeader">
+                        <i class="fa fa-edit"></i> Modification                                
+                </div>
+        </p-header>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+                <br/>
+                <app-dynamic-form [groups]="listGroupInputs" (formValid)="onValid($event)" (formSubmited)="onSubmit($event)"></app-dynamic-form>
+                <br>
+        </div>
+        
+        <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                        <!-- <button type="button" (click)="showProfil = false" >OK</button> -->
+                        <button  type="button"  (click)="showProfil = false; modify = false" class="btn btn-secondary"><i class="fa fa-check"></i> Fermer</button>
+                        <button  *ngIf="modify" type="button" [disabled]="this.myFormApp.disabled || disabled" (click)="callChild()" class="btn btn-primary"><i class="fa fa-refresh"></i> Valider</button>
+                </div>
+        </p-footer>
+</p-dialog>
+<p-dialog  *ngIf="showInfoGlob"  [(visible)]="showInfoGlob" [responsive]="true" showEffect="fade" [modal]="true" [closable]="true">
+    <p-header class="clearfix">
+            <div class="leftHeader">
+                    <i class="fa fa-edit"></i> Modification                                
+            </div>
+    </p-header>
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+            <br/>
+               {{message}}
+            <br>
+    </div>
+    
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                    <button  type="button"  (click)="show = false; modify = false" class="btn btn-primary"><i class="fa fa-check"></i> Fermer</button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Notification" [(visible)]="display" minWidth="400px">
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+            <br/>
+              Veuillez entrer votre commentaire
+            <br>
+            <textarea name="comment" id="" cols="30" rows="10" tabindex="1" [(ngModel)]="notifMessage"></textarea>
+            <br>
+
+    </div>
+    <p-dialog header="Notification" [(visible)]="display" minWidth="400px">
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+                <br/>
+                  Veuillez entrer votre commentaire
+                <br>
+                <textarea name="comment" id="" cols="30" rows="10" tabindex="1" [(ngModel)]="notifMessage"></textarea>
+                <br>
+    
+        </div>
+    
+        <p-footer>
+                <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                        <button  type="button"  (click)="display = false;sendNotif()" class="btn btn-primary"><i class="fa fa-check"></i> Fermer</button>
+                </div>
+        </p-footer>
+    </p-dialog>
+    
+  
+ 

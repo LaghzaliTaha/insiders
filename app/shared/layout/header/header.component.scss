@@ -1,0 +1,45 @@
+.first-header{
+  .langSubMn{
+    min-width: 80px;
+    .Lngicones{
+      background-image:url("../../../../assets/img/language.png");
+      background-size: cover;
+      display: inline-block;
+      height: 17px;
+      width: 25px;
+    }
+    a{
+      &:first-child{
+        .Lngicones{
+          background-position: 0 0;
+        }
+      }
+      &:nth-child(2){
+        .Lngicones{
+          background-position: 0 17px;
+        }
+      }
+    }
+    .dropdown-item {
+        padding: 3px;
+        height: auto;
+        width: 100%;
+        cursor: pointer;
+    }
+
+  }
+  .listicon.icon-message{
+    z-index: 3;
+    background: white;
+  }
+}
+.profil {
+  text-align: center;
+  padding: 15px;
+}
+.profilBloc{
+  float: left;
+  height: 70px;
+  border-left: 1px solid #eeeded;
+  text-align: center;
+}

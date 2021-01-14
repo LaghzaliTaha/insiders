@@ -1,0 +1,25 @@
+.btn:focus{
+    color: #fff;
+    background-color: #f16e00;
+    border-color: #f16e00;
+  }
+  
+li{
+    list-style: none;
+    display: inline-block;
+    width: 130px;
+    border: 1px solid orange;
+    border-radius: 0px 15px 15px 0px;
+    background: orange;
+    text-align: center;
+}
+
+.real-value{
+    background: #F16E00;
+    font-weight: bold;
+}
+
+.bottom-space{
+    margin-bottom: 10px;
+    display: block;
+}

@@ -1,0 +1,236 @@
+<div class="popupForms">
+<div class="card">
+  <div class="card-body">
+    <form class="form" [formGroup]="form" (ngSubmit)="updateUser()" novalidate>
+        
+          <!--****************************************************************** Infos personnelles ********************************************************************-->
+         <div class="formZone"> <h2 class="headerZone">Infos personnelles</h2>
+           <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" class="form-control form-control-sm" formControlName="prenom" id="prenom">
+              <div class="invalid-feedback" *ngIf="isError('prenom')"></div>
+          </div> 
+     
+       <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" class="form-control form-control-sm" formControlName="nom" id="nom" pInputText  >
+            <div class="invalid-feedback" *ngIf="isError('nom')"></div>
+          </div>
+        <div class="form-group">
+              <label for="nomNaissance">Nom de naissance</label>
+              <input type="text" class="form-control form-control-sm" formControlName="nomNaissance" id="nomNaissance">
+              <div class="invalid-feedback" *ngIf="isError('nomNaissance')">Veuillez saisir votre nom de naissance</div>
+            </div>
+        <div class="form-group">
+                <label for="adresseMail">Adresse mail</label>
+                <input type="text" class="form-control form-control-sm" formControlName="adresseMail" id="adresseMail">
+                <div class="invalid-feedback" *ngIf="isError('adresseMail')"></div>
+        </div>
+        <div class="form-group">
+            <label for="dateNaissance">Date de naissance</label>
+            <!-- <input type="text" class="form-control form-control-sm" formControlName="dateNaissance" id="dateNaissance" placeholder="jj-mm-aaaa"> -->
+            <p-calendar [(ngModel)]="dateNaissance" [locale]="fr" [formControlName]="dateNaissance"  dateFormat="dd/mm/yy" 
+            yearRange="1900:2018"></p-calendar>
+            <div class="invalid-feedback" *ngIf="isError('dateNaissance')">Veuillez saisir votre date de naissance</div>
+        </div>
+        <div class="form-group">
+            <label for="dateNaissance">Numéro d'identification national</label>
+            <input type="text" class="form-control form-control-sm" formControlName="NumIdentifNational" id="NumIdentifNational" placeholder="(CNI ou passeport)">
+            <div class="invalid-feedback" *ngIf="isError('NumIdentifNational')">Veillez saisir votre CNI ou passeport</div>
+        </div>
+        <div class="form-group">
+            <label for="numPriveFixe">Numéro privé fixe</label>
+            <input type="text" class="form-control form-control-sm" formControlName="numPriveFixe" id="numPriveFixe" placeholder="+33XXXXXXXXX">
+            <div class="invalid-feedback" *ngIf="isError('numPriveFixe')">Veillez saisir votre votre numéro privé fixe</div>
+        </div>
+        <div class="form-group">
+            <label for="numPriveMobile">Numéro privé mobile</label>
+            <input type="text" class="form-control form-control-sm" formControlName="numPriveMobile" id="numPriveMobile" placeholder="+33XXXXXXXXX">
+            <div class="invalid-feedback" *ngIf="isError('numPriveMobile')">Veillez saisir votre numéro privé mobile</div>
+        </div>
+      </div>
+         
+
+    <!--************************************************Infos Initiés ********************************************************************-->
+    <div class="formZone"><h2 class="headerZone">Infos Initié</h2>
+        
+      <div class="form-group">
+        <label for="profil">Profil</label>
+        <input type="text" class="form-control form-control-sm" formControlName="profil" id="profil" >
+        <!-- <div class="invalid-feedback" ></div> -->
+      </div>
+      <div class="form-group">
+          <label for="condition">Condition</label>
+          <input type="text" class="form-control form-control-sm" formControlName="condition" id="condition">
+          <!-- <div class="invalid-feedback" ></div> -->
+        </div>
+        <div class="form-group">
+          <label for="referent">Referent</label>
+          <input type="text" class="form-control form-control-sm" formControlName="referent" id="referent">
+          <!-- <div class="invalid-feedback" ></div> -->
+        </div>
+        <div class="form-group">
+          <label for="projets">Projets</label>
+          <input type="text" class="form-control form-control-sm" formControlName="projets" id="projets">
+          <!-- <div class="invalid-feedback" ></div> -->
+        </div>
+     <div class="form-group">
+        <label for="fonction">Fonction</label>
+        <input type="text" class="form-control form-control-sm" formControlName="fonction" id="fonction" placeholder="Entreprise ou division/ Poste occupé">
+        <div class="invalid-feedback" *ngIf="isError('fonction')">Veillez saisir votre fonction</div>
+      </div>
+      <div class="form-group">
+        <label for="raison">Raison</label>
+        <input type="text" class="form-control form-control-sm" formControlName="raison" id="raison">
+        <div class="invalid-feedback" *ngIf="isError('raison')">Veillez saisir la raison</div>
+      </div>
+     <div class="form-group">
+        <label for="dateInscription">Début inscription</label>
+        <input type="text" class="form-control form-control-sm" formControlName="dateInscription" id="dateInscription">
+        <!-- <ng-template pTemplate="form"> -->
+         
+            <!-- {{this.form.get('dateInscription').value | date:'dd-MM-yyyy' }}"  -->
+         
+        <!-- </ng-template> -->
+        <!-- <div class="invalid-feedback" *ngIf="isError('dateInscription')">Veillez</div> -->
+      </div>
+    <div class="form-group">
+        <label for="dateSignature">Date de signature</label>
+        <input type="text" class="form-control form-control-sm" formControlName="dateSignature" id="dateSignature" placeholder="Ce champs est renseigné automatiquement">
+        <!-- <div class="invalid-feedback" *ngIf="isError('dateSignature')">Veillez</div> -->
+      </div>
+     <div class="form-group">
+        <label for="dateFinInscription">Fin inscription</label>
+        <input type="text" class="form-control form-control-sm" formControlName="dateFinInscription" id="dateFinInscription" placeholder="Ce champs est renseigné automatiquement">
+        <!-- <div class="invalid-feedback" *ngIf="isError('dateFinInscription')">Veillez</div> -->
+      </div>
+    </div>
+    
+      <!--************************************************ Fin Infos Initiés ********************************************************************-->
+        <!--  Adresse privée complète -->
+        <div class="formZone"><h2 class="headerZone">Adresse privée complète</h2>
+        <div class="form-group">
+           <label for="nomRuePr">Nom de rue</label>
+           <input type="text" class="form-control form-control-sm" formControlName="nomRuePr" id="nomRuePr" placeholder="Nom de rue">
+           <div class="invalid-feedback" *ngIf="isError('nomRuePr')">Nom de rue manquant</div>
+         </div>
+         <div class="form-group">
+             <label for="numRuePr">Numéro de rue</label>
+             <input type="text" class="form-control form-control-sm" formControlName="numRuePr" id="numRuePr" placeholder="Numéro de rue">
+             <div class="invalid-feedback" *ngIf="isError('numRuePr')">Numéro de rue manquant</div>
+         </div>
+         <div class="form-group">
+             <label for="complementAdressePr">Complément d'adresse</label>
+             <input type="text" class="form-control form-control-sm" formControlName="complementAdressePr" id="complementAdressePr" placeholder="Complément d'adresse">
+             <!-- <div class="invalid-feedback" ></div> -->
+           </div>
+     
+           <div class="form-group">
+               <label for="villePr">Ville</label>
+               <input type="text" class="form-control form-control-sm" formControlName="villePr" id="villePr" placeholder="ville">
+               <div class="invalid-feedback" *ngIf="isError('villePr')">Ville manquante</div>
+           </div>
+         <div class="form-group">
+               <label for="codePostalPr">Code Postal</label>
+               <input type="text" class="form-control form-control-sm" formControlName="codePostalPr" id="codePostalPr" placeholder="Code Postal">
+               <div class="invalid-feedback" *ngIf="isError('codePostalPr')">Code postal manquant</div>
+             </div>
+             
+         <div class="form-group">
+               <label for="paysPr">Pays</label>
+               <input type="text" class="form-control form-control-sm" formControlName="paysPr" id="paysPr" placeholder="Pays">
+               <div class="invalid-feedback" *ngIf="isError('codePostalPr')">Pays manquant</div>
+         </div>
+         </div>
+
+ <!--************************************************Fin Infos personnelles ************************************************************************-->
+      
+      <!--************************************************  Infos Entreprise **************************************************************-->
+      <div class="formZone"><h2 class="headerZone">Infos Entreprise</h2>
+      
+      <div class="form-group">
+        <label for="nomEntreprise">Nom de l'entreprise</label>
+        <input type="text" class="form-control form-control-sm" formControlName="nomEntreprise" id="nomEntreprise" placeholder="Nom de l'entreprise">
+        <!-- <div class="invalid-feedback" *ngIf="isError('nomEntreprise')">Veillez</div> -->
+      </div>
+      </div>
+
+                        <!--************************************Adresse de l'entreprise*******************************  -->
+                <div class="formZone"><h2 class="headerZone">Adresse de l'entreprise</h2>
+      <div class="form-group">
+        <label for="nomRueEnt">Nom de rue</label>
+        <input type="text" class="form-control form-control-sm" formControlName="nomRueEnt" id="nomRueEnt" placeholder="Nom de rue">
+        <div class="invalid-feedback" *ngIf="isError('nomRueEnt')">Nom de rue manquante</div>
+      </div>
+      <div class="form-group">
+        <label for="numRueEnt">Numéro de rue</label>
+        <input type="text" class="form-control form-control-sm" formControlName="numRueEnt" id="numRueEnt" placeholder="Numéro de rue">
+        <div class="invalid-feedback" *ngIf="isError('numRueEnt')">Num de rue manquant</div>
+      </div>
+      <div class="form-group">
+          <label for="complementAdresseEnt">Complément d'adresse</label>
+          <input type="text" class="form-control form-control-sm" formControlName="complementAdresseEnt" id="complementAdresseEnt" placeholder="Numéro de rue">
+          <!-- <div class="invalid-feedback" *ngIf="isError('numRueEnt')">Veillez</div> -->
+      </div>
+      <div class="form-group">
+        <label for="villeEnt">Ville</label>
+        <input type="text" class="form-control form-control-sm" formControlName="villeEnt" id="villeEnt" placeholder="Ville">
+        <div class="invalid-feedback" *ngIf="isError('villeEnt')">Ville manquante</div>
+      </div>
+     <div class="form-group">
+        <label for="codePostalEnt">Code Postal</label>
+        <input type="text" class="form-control form-control-sm" formControlName="codePostalEnt" id="codePostalEnt" placeholder="Code Postal">
+        <div class="invalid-feedback" *ngIf="isError('villeEnt')">Code postal manquant</div>
+      </div>
+     <div class="form-group">
+        <label for="codePostalEnt">Pays</label>
+        <input type="text" class="form-control form-control-sm" formControlName="paysEnt" id="paysEnt" placeholder="Pays">
+        <div class="invalid-feedback" *ngIf="isError('paysEnt')">Pays entreprise manquant</div>
+      </div>
+
+      <div class="form-group">
+        <label for="numProFixe">Numéro professionnel fixe</label>
+        <input type="text" class="form-control form-control-sm" formControlName="numProFixe" id="numProFixe" placeholder="+33XXXXXXXXX">
+        <div class="invalid-feedback" *ngIf="isError('numProFixe')">Numéro pro fixe manquant</div>
+      </div>
+    </div>
+
+      <div class="form-group">
+        <label for="numeroMobile">Numéro professionnel portable</label>
+        <input type="text" class="form-control form-control-sm" formControlName="numeroMobile" id="numeroMobile">
+        <!-- <div class="invalid-feedback" ></div> -->
+      </div>
+      <div class="form-group">
+          <input type="checkbox" (click)="confirmationFunction()" id="checkbox"> Je confirme l’exactitude des informations renseignées, transmissibles sur demande à l’AMF en raison de mon statut d’initié.
+          <div class="invalid-feedback" *ngIf="isError('confirmation')">Veuillez confirmer l'exactitude des informations avant de valider votre modifications</div> 
+      
+        </div>
+
+                           <!--******************************Fin Adresse de l'entreprise*******************************  -->
+        <!--********************************************Fin Infos Entreprise **************************************************************-->
+      
+      
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <button [disabled]="addFormControl()" type="submit" class="btn btn-primary" id="valider">Valider</button>
+        <button type="button" class="btn btn-danger" [routerLink]="['/INSIDERS/rest/utilisateurs']">ANNULER</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+</div>
+
+<p-dialog header="Modification" [(visible)]="addUserDisplayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    Votre profil est modifié avec succès 
+  </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <!-- <button type="button" class="btn-danger" (click)="cancel()" ><i class="fa fa-close"></i> ANNULER</button> -->
+          <button type="button" class="submitbtn" (click)="send()" id="OK"><i class="fa fa-check"></i>OK</button>
+      </div>
+  </p-footer>
+</p-dialog>
+
+
+

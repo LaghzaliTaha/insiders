@@ -1,0 +1,175 @@
+<div class="dataTables_wrapper">
+        <div detect-scroll (onScroll)="handleScroll($event)" [bottomOffset]="1">  
+          <p-dataTable  [value]="data"
+          class="row-border homeTable hover"
+          reorderableColumns="true"
+          resizableColumns="true"
+          [responsive]="true"
+          selectionMode="multiple"
+          [(selection)]="rows"
+          [loading]="loading" displaySelectedLabel="false"
+          [globalFilter]="gb"
+          [emptyMessage]="'Aucun Enregistrement Trouvé'"
+          sortMode="multiple" 
+          scrollable="true" scrollHeight="70vh"
+          #dt> 
+
+          
+
+          
+                <p-header class="clearfix">
+                        <div class="row">
+                                <div class="elemLngt col-md-3 listActionfirst">
+                                        <h6>
+                                                <span>Eléments</span>
+                                                <span class="badge badge-secondary">{{this.dataPeriodes.length}}</span>
+                                        </h6>
+                                </div>
+                                <div class="btnControl col-md-6">
+                                        <header class="second-header clearfix">
+                                                <div class="Files-section">
+                                                        <div class="content-second-header">
+                                                                <div class="list-action">
+                                                                        <div class="btn btnTblControl" id="tstBtnConsulter" >
+                                                                                <button class="btn btn-secondary" [disabled]="rows.length != 1" (click)="this.showPeriod()">
+                                                                                        <i class="material-icons">&#xE8DF;</i>
+                                                                                        <span>Consulter</span>
+                                                                                </button>
+                                                                        </div>
+                                                                        <div class="btn btnTblControl" *ngIf="this.checkIfAdmin()">
+                                                                                <button class="btn btn-secondary" [routerLink]="['/angular/periodes/addPeriod']">
+                                                                                        <i class="material-icons">&#xE146;</i>
+                                                                                        <span>Créer période</span>
+                                                                                </button>       
+                                                                        </div> 
+                                                                        
+                                                                        <div class="dropdown actions" *ngIf="this.checkIfAdmin()">
+                                                                                <button [disabled]="rows.length <1" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                                                        aria-expanded="true">
+                                                                                                ...
+                                                                                </button>
+                                                                                <nav class="dropdown-menu second-head " aria-labelledby="dropdownMenu1">
+                                                                                        <li class="dropdown-item" *ngIf="rows.length === 1" [hidden]="verifyNotification()" (click)="notify()">
+                                                                                                         <i class="material-icons second-head-ico">&#xE7F5;</i>
+                                                                                                        Notifier
+                                                                                
+                                                                                        </li>
+                                                                                        <li class="dropdown-item">
+                                                                                                <i class="material-icons second-head-ico">&#xE909;</i>Supprimer
+                                                                                        </li>
+                                                                                </nav>
+                                                                        </div>
+    
+                                                                </div>
+                                                        </div> 
+                                                </div>
+                                        </header>
+                                </div>
+                                <div class="searchUi col-md-3">
+                                        <input #gb type="text" pInputText size="50" placeholder="Global Filter" id="tstInputSearch">
+                                        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                </div>                        
+                        </div>
+                </p-header>
+
+
+                <p-column  [style]="{'width':'30px','text-align':'center'}" selectionMode="multiple" [resizable]="false"></p-column>
+                <p-column header="Action" [style]="{'overflow':'visible','width':'77px','text-align':'center'}"
+                [resizable]="false">
+                        <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                        <div class="dropdown actions">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" >
+                                </button>
+                                <nav class="dropdown-menu second-head actionToUp" aria-labelledby="dropdownMenu1">
+                                        <li class="dropdown-item" (click)="singleNotify(row)">
+                                                <i class="material-icons second-head-ico">&#xE7F5;</i>
+                                                        Notifier
+                                        </li>
+                                        <li class="dropdown-item">
+                                                <i class="material-icons">&#xE042;</i>
+                                                 Relancer 
+                                        </li>
+                                </nav>
+                        </div>
+                        </span>
+                        </ng-template>
+                </p-column>
+                <p-column  field="nomPeriode" header="Nom période"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" ></p-column>
+                <p-column  field="typePeriode" header="Type Période"  [sortable]="true" [sortable]="true" [filter]="true" filterMatchMode="equals" >
+                        <ng-template pTemplate="filter" let-col>
+                                <p-dropdown [options]="typePeriode" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+                        </ng-template>
+
+                </p-column>
+                <p-column  field="dateDebut" header="Date de début"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer" >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                                {{ (row.dateDebut | date:'dd/MM/yyyy') }}
+                        </span>
+                
+                </ng-template>
+
+                </p-column>
+                <p-column  field="dateFin" header="Date de fin"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer"  >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                                {{ (row.dateFin | date:'dd/MM/yyyy') }}
+                        </span>
+                
+                </ng-template>
+
+
+                </p-column>
+                <p-column  field="status" header="Etat"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer"  >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                                {{ statutperiode(row.dateFin, row.dateDebut)}}
+                        </span>
+                
+                </ng-template>
+
+                </p-column>
+                <p-column  field="dateNotif" header="Date de notification"  [sortable]="true" [filter]="true" filterPlaceholder="Filtrer"  >
+                <ng-template let-cols let-row="rowData" pTemplate="body">
+                        <span>
+                                {{ (row.dateNotif | date:'dd/MM/yyyy') }}
+                        </span>
+                
+                </ng-template>
+                </p-column>
+                 
+          </p-dataTable>
+          <div class="infinit-scroll" *ngIf="showInfinitScroll" (click)='loadMore()'>
+              <p><i class="fa fa-spinner fa-spin" aria-hidden="true"></i>afficher {{rowsNumber}} resultats de +</p>
+          </div>
+        </div> 
+                  
+      </div>
+      <p-dialog header="Notification envoyée" [(visible)]="notificationClicked" [responsive]="true" showEffect="fade" [modal]="true">
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+          {{messageNotificationSuccess}}
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" class="btn btn-primary" (click)="cancel()" ><i class="fa fa-check"></i> OK </button>
+            </div>
+        </p-footer>
+      </p-dialog>
+<p-dialog header="Message" [(visible)]="messageDisplayDialog" [draggable]="true" 
+    [resizable]="true" modal="true" [width]="500"  (onHide)="closePopUp()">
+  
+  <div class="ui-dialog-content" style="height:126px">
+    <span style="text-align: center; font-size: 26px;">{{message}}</span>
+    <p-panel *ngIf="showErrorMessage" header="Erreurs" [toggleable]="true" [collapsed]="true" >
+        {{errorMessage}}
+      </p-panel>
+  </div>
+    
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-primary" (click)="closePopUp()" ><i class="fa fa-check"></i> OK</button>
+      </div>
+  </p-footer>
+</p-dialog>

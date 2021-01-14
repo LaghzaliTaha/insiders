@@ -1,0 +1,46 @@
+ <div class="nav-collapse sidebar">
+    <span><i class="fa fa-chevron-right toggle-menu" aria-hidden="true"  id="menuBtn"></i></span>
+    <div class="profil-picture">
+    </div>
+    <div class="profil-collapse">
+        <div class="profil">
+            <p>
+                <span>{{this.getUserName()}}</span><br>
+                <span>{{this.getProfile()}}</span>                
+            </p>
+        </div>
+    </div>
+  <nav class="nav-sideBar">
+    <li id="tstBarAccueil"  class="disabledMenu">
+        <div class="contRef">
+          <div class=" dropdown-toggle">
+              <i class="material-icons">home</i>
+              <span>Accueil</span>
+          </div>
+        </div>
+    </li>
+    <li *ngIf="this.checkUtilisateurs()" [routerLink]="['angular/utilisateurs']" [ngClass]="{'active': this._CoreService.getCurrentClass()==='utilisateurs'}">
+        <i class="material-icons" id="tstBarUser">
+        account_circle</i><span>Utilisateurs</span>
+    </li>
+        <li *ngIf="this.checkPeriodes()" [routerLink]="['angular/periodes']" class="twoLigne" [ngClass]="{'active': this._CoreService.getCurrentClass()==='periodes'}">
+            <i class="material-icons">date_range</i>
+            <span>Périodes d'abstention</span>
+        </li>
+        <li *ngIf="this.checkReferents()" [routerLink]="['angular/referents']"  [ngClass]="{'active': this._CoreService.getCurrentClass()==='listes'}">
+            <i class="material-icons" id="tstBarMajListe">
+        assignment_turned_in</i>
+        <span>MAJ listes</span></li>
+        <li *ngIf="this.checkCorrespondant()" [routerLink]="['angular/utilisateurs/listMAJDIS']"   [ngClass]="{'active': this._CoreService.getCurrentClass()==='listes'}">
+            <i class="material-icons" id="tstBarMajListe">
+            assignment_turned_in</i>
+        <span>MAJ listes</span></li>
+        <li *ngIf="this.checkPilote()" [routerLink]="['angular/utilisateurs/referent/majInitieOccasionnel']"   [ngClass]="{'active': this._CoreService.getCurrentClass()==='listes'}"><i class="material-icons" id="tstBarMajListe">
+            assignment_turned_in</i>
+        <span>MAJ Initiés</span></li>
+        <li *ngIf="this.checkModels()" id="tstBarModele" class="twoLigne disabledMenu">
+            <i class="material-icons" >insert_drive_file</i>
+            <span>Modèles de documents</span>
+        </li> 
+  </nav>
+</div>

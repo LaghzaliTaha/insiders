@@ -1,0 +1,67 @@
+
+       .btn:focus{
+        color: #fff;
+        background-color: #f16e00;
+        border-color: #f16e00;
+      }
+      
+      .btn-secondary:focus{
+        color: #000;
+        background-color: transparent;
+        border-color: #000;
+      }
+
+    .headerClick {
+        display: block;
+        cursor: pointer;
+        text-align: left;
+      }
+      .rectangle {
+        position: relative;
+        top: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 150px;
+        background-color: #FD4140;
+        border: solid 1px #121621;
+        color: #121621;
+        margin: auto;
+      }
+      .resize-handle {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        cursor: se-resize;
+      }
+      .actionTop{
+        float: right;
+        button{
+          margin: 0;
+          height: 32px;
+        }
+      }
+      //popup form
+
+      .rightHeader {
+        float: right;
+        .btn {
+            border: 1px solid #7b7474;
+            text-align: center;
+            background-color: #f7f7f5;
+            margin: 0;
+        }
+      }
+   
+
+
+      .zoneHeader {
+        color: #ffffff;
+        display: block;
+        background-color: #d87f40;
+        padding: 11px;
+        text-align: center;
+        font-size: 18px;
+      }
+      

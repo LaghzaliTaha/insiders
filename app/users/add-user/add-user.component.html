@@ -1,0 +1,186 @@
+<div class="card">
+  <div class="card-body">
+    <form class="form" [formGroup]="form" (ngSubmit)="addUser()" novalidate>
+
+      <div class="form-group">
+        <label for="profil">Profil</label>
+        <select class="form-control form-control-sm" formControlName="profil" id="profil" (change)="profileChanged()">
+          <option value="" selected="selected" style="display: none">Choisir le profil</option>
+          <option *ngFor="let profilValue of profils" [ngValue]="profilValue">{{ profilValue }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="isError('profil')">Veuillez choisir un profil</div>
+      </div>
+      
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <label for="nom">Nom</label>
+        <input type="text" class="form-control form-control-sm" formControlName="nom" id="nom" placeholder="Entrez le nom">
+        <div class="invalid-feedback" *ngIf="isError('nom')">Le nom doit contenir au moins un caractère</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <label for="prenom">Prénom</label>
+        <input type="text" class="form-control form-control-sm" formControlName="prenom" id="prenom"  placeholder="Entrez le prénom">
+        <div class="invalid-feedback" *ngIf="isError('prenom')">Le prénom doit contenir au moins un caractère</div>
+      </div>
+      
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <label for="email">Adresse mail</label>
+        <input type="email" class="form-control form-control-sm" formControlName="adresseMail" id="email" placeholder="nom@example.com">
+        <div class="invalid-feedback" *ngIf="isError('adresseMail')">Le format de l'email n'est pas valide</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <label for="numTel">Numéro professionnel mobile</label>
+        <input type="text" class="form-control form-control-sm" formControlName="numeroMobile" id="numTel" placeholder="+33XXXXXXXXX">
+        <div class="invalid-feedback" *ngIf="isError('numeroMobile')">Le numéro de Téléphone doit commencer par +33 et doit contenir 11 chiffres</div>
+      </div>
+
+      
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Initié Permanent' || this.form.get('profil').value === 'Initié Occasionnel'">
+        <label for="condition">Condition</label>
+        <select class="form-control form-control-sm " formControlName="condition" id="condition">
+            <option value="" selected="selected" style="display: none">Choisir une condition</option>
+            <option *ngFor="let conditionValue of conditions" [ngValue]="conditionValue">{{ conditionValue }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="isError('condition')">Veuillez choisir une condition</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Initié Permanent' || this.form.get('profil').value === 'Initié Occasionnel'">
+          <label for="Raison">Raison de désignation</label>
+          <select class="form-control form-control-sm " formControlName="raison" id="Raison">
+            <option value="" selected="selected" style="display: none">Choisir la raison de désignation</option>
+            <option *ngFor="let raisonValue of raisons" [ngValue]="raisonValue">{{ raisonValue }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('raison')">Veuillez choisir une raison de désignation</div>
+      </div>
+      
+      <div class="form-group"*ngIf="this.form.get('profil').value === 'Initié Occasionnel'">
+          <label for="pilote">Pilote</label>
+          <select class="form-control form-control-sm " formControlName="pilote" (change)="piloteChanged()" id="pilote">
+            <option value="" selected="selected" style="display: none">Choisir le pilote</option>
+            <option *ngFor="let piloteValue of pilotes" [ngValue]="piloteValue">{{ piloteValue.nom + ' ' +  piloteValue.prenom}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('pilote')">Veuillez choisir un pilote</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Initié Occasionnel'">
+          <label for="Projet">Projet</label>
+          <select class="form-control form-control-sm " formControlName="projet" multiple id="Projet">
+            <option value="" selected="selected" style="display: none">Choisir</option>
+            <option *ngFor="let projetValue of projets" [ngValue]="projetValue">{{ projetValue.nom }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('projet')">Veuillez choisir au moins un projet</div>
+      </div> 
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Pilote'">
+        <label for="Projet">Projet</label>
+        <div class="row" >
+          <div class="col-md-8">
+        <select class="form-control form-control-sm " formControlName="projet" multiple id="Projet">
+          <!-- <option value="" selected="selected" style="display: none">Choisir</option> -->
+          <option *ngFor="let projetValue of projets" [selected]="isSelected(projetValue)" [id]="projetValue.nom"  [ngValue]="projetValue">{{ projetValue.nom }}</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group" *ngIf="this.form.get('profil').value">
+            <button type="button" class="btn btn-primary submitbtn"  (click)="showProjectDisplayDialog()">Ajouter</button>
+        </div>
+      </div>
+      </div>
+        <div class="invalid-feedback" *ngIf="isError('projet')">Veuillez choisir au moins un projet</div>
+      </div> 
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Correspondant' || this.form.get('profil').value === 'DIS'">
+          <label for="Fonction">Fonction</label>
+          <input type="email" class="form-control form-control-sm" formControlName="fonction" placeholder="Entreprise ou division/ Poste occupé" id="Fonction">
+          <div class="invalid-feedback" *ngIf="isError('fonction')">La fonction doit contenir au moins 4 caractères</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Correspondant'">
+          <label for="Membre">Membre du COMEX</label>
+          <select class="form-control form-control-sm form-control form-control-sm-lg" formControlName="comex" id="Membre">
+            <option value="" selected="selected" style="display: none">Choisir</option>
+            <option *ngFor="let comexValue of comexs" [ngValue]="comexValue">{{ comexValue.nom + ' ' + comexValue.prenom }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('comex')">Veuillez choisir un membre</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'Pilote'">
+          <label for="Entite">Entité</label>
+          <input type="email" class="form-control form-control-sm" formControlName="entite" placeholder="Entité" id="Entite">
+          <div class="invalid-feedback" *ngIf="isError('entite')">L'entité doit contenir au moins 4 caractères</div>
+      </div>
+ 
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'DIS'">
+          <label for="ref">Référent</label>
+          <select class="form-control form-control-sm form-control form-control-sm-lg" formControlName="referent" id="ref">
+            <option value="" selected="selected" style="display: none">Choisir</option>
+            <option *ngFor="let referentValue of referents" [ngValue]="referentValue">{{ referentValue.nom + ' ' + referentValue.prenom }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('referent')">Veuillez choisir un référent</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value === 'DIS'">
+          <label for="desPar">Désigné par</label>
+          <select class="form-control form-control-sm form-control form-control-sm-lg" formControlName="designePar" id="desPar">
+            <option value="" selected="selected" style="display: none">Choisir</option>
+            <option *ngFor="let designeParValue of designeParList" [ngValue]="designeParValue">{{ designeParValue.nom + ' ' +  designeParValue.prenom}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="isError('designePar')">Veuillez choisir une désignation</div>
+      </div>
+
+      <div class="form-group" *ngIf="this.form.get('profil').value">
+        <button [disabled]="addFormControl()" type="submit" class="btn btn-primary submitbtn">Valider</button>
+        <button type="button" class="btn btn-primary btn-danger" [routerLink]="['/INSIDERS/rest/utilisateurs']">Annuler</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<p-dialog header="Ajouter un utilisateur" [(visible)]="addUserDisplayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+  <div *ngIf="this.form.get('profil').value ==='Correspondant' || this.form.get('profil').value ==='Pilote' || this.form.get('profil').value=='DIS' " class="ui-grid ui-grid-responsive ui-fluid">
+    Souhaitez-vous créer le {{this.form.get('profil').value}} : {{this.form.get('nom').value}} {{this.form.get('prenom').value}} et envoyer le mail à {{this.form.get('adresseMail').value}} ? 
+  </div>
+  <div *ngIf="!(this.form.get('profil').value ==='Correspondant' || this.form.get('profil').value === 'Pilote'|| this.form.get('profil').value=='DIS')" class="ui-grid ui-grid-responsive ui-fluid">
+    Souhaitez-vous créer l'{{this.form.get('profil').value}} : {{this.form.get('nom').value}} {{this.form.get('prenom').value}} et envoyer le mail à {{this.form.get('adresseMail').value}} ? 
+  </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-danger" (click)="cancel()" > Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="send()" > Confirmer</button>
+      </div>
+  </p-footer>
+</p-dialog>
+<p-dialog header="Message" [(visible)]="messageDisplayDialog" [draggable]="true" 
+    [resizable]="true" modal="true" [width]="500"  (onHide)="closePopUp()">
+  
+  <div class="ui-dialog-content" style="height:126px">
+    <span style="text-align: center; font-size: 26px;">{{message}}</span>
+    <p-panel *ngIf="showErrorMessage" header="Erreurs" [toggleable]="true" [collapsed]="true" >
+        {{errorMessage}}
+      </p-panel>
+  </div>
+  <!-- <button *ngIf="!showErrorMessage" (click)="showErrorMessage = true"><i class="fa fa-check"></i></button> -->
+  <!-- <div *ngIf="showErrorMessage" style="height: 1000px" class="ui-grid ui-grid-responsive ui-fluid">
+    {{errorMessage}}
+  </div> -->
+    
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-primary" (click)="closePopUp()" > OK</button>
+      </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Ajouter un projet" [(visible)]="addProjectDisplayDialog"  [responsive]="true" showEffect="fade" [modal]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    <input type="text" class="form-control form-control-sm"  #nomProjet id="projetToAdd" placeholder="Entrez le nom du projet">
+    </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-danger" (click)="cancelProjectDisplayDialog()" > Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="addProject(nomProjet.value)" > Confirmer</button>
+      </div>
+  </p-footer>
+  <div class="invalid-feedback" *ngIf="projetInexist()">{{creationProjetError}}</div>
+</p-dialog>

@@ -1,0 +1,21 @@
+<p *ngIf="!showRolesSelect">
+  
+</p>
+
+<p-dialog *ngIf="showRolesSelect"  [(visible)]="showRolesSelect" [responsive]="true" showEffect="fade" [modal]="true" [closable]="false">
+  <p-header>
+          <i class="fa fa-users"></i> Rôles
+  </p-header>
+      <div>
+         <span >Choisir un rôle:  </span> 
+         <select  class="form-control form-control-sm"  id="role"  #selectedRole>
+            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+         </select>
+    <!--     <button type="button"  (click)="validRole(selectedRole.value)" >Valider</button>-->
+      </div>
+  <p-footer>
+  <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-primary" (click)="validRole(selectedRole.value)" >Valider</button>
+  </div>
+  </p-footer>
+</p-dialog>

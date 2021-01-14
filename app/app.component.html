@@ -1,0 +1,18 @@
+<app-sidebar></app-sidebar>
+<div class="main-content">
+  <app-header></app-header>
+  <app-breadcrumps class="second-header"></app-breadcrumps>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</div>
+
+<p-dialog [(visible)]="timeoutDisplay" [modal]="true" [responsive]="true" [closable]="false">
+  <p-header>
+      <i class="fa fa-hourglass-end" aria-hidden="true"></i> 
+      Session a expiré
+  </p-header>
+  Votre session a expirée.
+  <p-footer>
+      <button type="button" class="btn-warning" (click)="reconnect()" ><i class="fa fa-refresh"></i> Se reconnecter</button>
+  </p-footer>
+</p-dialog>

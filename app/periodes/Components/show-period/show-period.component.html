@@ -1,0 +1,98 @@
+<div class="card">
+  <div class="card-body">
+    <form class="form" [formGroup]="periodMAJForm"  (ngSubmit)="toUpdatePeriod()" novalidate> 
+      <div class="form-group" >
+        <label for="nomPeriode">Nom de la période</label>
+        <input type="text" class="form-control form-control-sm" id="nomPeriodeShow" formControlName="nomPeriode" [(ngModel)]="periode.nomPeriode" >
+      </div>
+
+      <div class="form-group" >
+        <label for="typePeriode">Type de période</label>
+        <select class="form-control form-control-sm" id="typePeriodeShow" *ngIf="this.disabledForm === false" formControlName="typePeriode" [(ngModel)]="periode.typePeriode" >
+          <option *ngFor="let type of typePeriodeList" [ngValue]="type" >{{type}}</option>
+        </select>
+        <select class="form-control form-control-sm" id="typePeriodeShow" *ngIf="this.disabledForm === true" [disabled]="this.disabledForm" >
+          <option *ngFor="let type of typePeriodeList" [ngValue]="type" [selected]="periode.typePeriode === type">{{type}}</option>
+        </select>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateDebut">Date début période</label>
+        <p-calendar class="form-control form-control-sm " formControlName="dateDebut" [inputStyle]="{opacity: 1}" id="dateDebutShow" name="dateDebutShow" [(ngModel)]="periode.dateDebut" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="periodMAJForm.get('dateDebut').invalid && periodMAJForm.get('dateDebut').touched">La date de début de période doit être postérieure à la date du jour </div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateFin">Date fin période</label>
+        <p-calendar class="form-control form-control-sm" id="dateFin" formControlName="dateFin" [inputStyle]="{opacity: 1}" name="dateFin" [(ngModel)]="periode.dateFin" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="allowedDateFin()">La date de fin de période doit être postérieure à la date de début de période </div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateDebutPlac">Date début placement</label>
+        <p-calendar class="form-control form-control-sm" id="dateDebutPlac" formControlName="dateDebutPlac" [inputStyle]="{opacity: 1}" name="dateDebutPlac"  [(ngModel)]="periode.dateDebutPlacement" dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="periodMAJForm.get('dateDebutPlac').invalid && periodMAJForm.get('dateDebutPlac').touched">La date de début placement doit être postérieure à la date du jour </div>
+      </div>
+
+      <div class="form-group" >
+        <label for="dateFinPlac">Date fin placement</label>
+        <p-calendar class="form-control form-control-sm" id="dateFinPlac" formControlName="dateFinPlac" [inputStyle]="{opacity: 1}" name="dateFinPlac" [(ngModel)]="periode.dateFinPlacement " dateFormat="dd/mm/yy" ></p-calendar>
+        <div class="invalid-feedback" *ngIf="allowedDateFinPlac()">La date de fin placement doit être postérieure à la date de début placement</div>
+      </div>
+
+      <div class="form-group" >
+        <label for="status">Statut</label>
+        <div class="form-group">
+          <p-steps [model]="statusListStep" class="ui-steps steps-custom fourSteps" [activeIndex]="getActiveIndex()"></p-steps>
+        </div>
+      </div>
+
+      <div class="form-group" [hidden]="periode.status !== 'Periode notifiee'">
+        <a [routerLink]=""  class="bottom-space" (click)="getNotifiedUsers()" ><i class="glyphicon glyphicon-align-justify"></i> Afficher la liste des personnes notifiées</a>
+        <div *ngIf="this.notifiedUsersList.length > 0">
+         
+              <p-dataTable  [value]="notifiedUsersList"
+                class="row-border formDataTable hover"                
+                [emptyMessage]="'Aucun Enregistrement Trouvé'"
+                scrollable="true" scrollHeight="70vh"
+                 #dt>
+                <p-column field="adressMail" header="adresse"></p-column>
+              </p-dataTable>
+        </div>
+      </div>
+
+      <div class="form-group" >
+          <button type="button" *ngIf="this.disabledForm === true" (click)="activateModification()" class="btn btn-primary submitbtn">Modifier</button>
+        <button type="submit" *ngIf="this.disabledForm === false" [disabled]="majFormControl()" class="btn btn-primary submitbtn" >Valider</button>
+        <button type="button" class="btn btn-primary btn-danger" (click)="backAction()">{{btnNameBack}}</button>
+      </div>
+    </form>
+  </div>
+</div>
+<p-dialog header="Modifier une période" [(visible)]="majPeriodDisplayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    Souhaitez-vous modifier la période d'abstention "{{this.periodMAJForm.get('nomPeriode').value}}" pour les dates du "{{this.periodMAJForm.get('dateDebut').value | date:'yyyy-MM-dd' }}" au "{{this.periodMAJForm.get('dateFin').value | date:'yyyy-MM-dd'}}" ? 
+  </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-secondary" (click)="cancel()" > Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="send()" > Ok</button>
+      </div>
+  </p-footer>
+</p-dialog>
+<p-dialog header="Message" [(visible)]="messageDisplayDialog" [draggable]="true" 
+    [resizable]="true" modal="true" [width]="500"  (onHide)="closePopUp()">
+  
+  <div class="ui-dialog-content" style="height:126px">
+    <span style="text-align: center; font-size: 26px;">{{message}}</span>
+    <p-panel *ngIf="showErrorMessage" header="Erreurs" [toggleable]="true" [collapsed]="true" >
+        {{errorMessage}}
+      </p-panel>
+  </div>
+    
+    <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button type="button" class="btn btn-primary" (click)="closePopUp()" > Ok</button>
+      </div>
+  </p-footer>
+</p-dialog>

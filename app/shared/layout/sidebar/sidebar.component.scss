@@ -1,0 +1,126 @@
+.sidebar {
+  .profil-picture{
+    background-image: url(../../../../assets/img/picture.png);
+    background-size: contain;
+  }
+  li{
+    position: relative;
+    cursor: pointer;
+  }
+  .disabledMenu{
+    background-color: #909090;
+    cursor: not-allowed;
+  }
+  .contRef{
+    .dropdown-menu {
+      top: 0;
+      left: 100%;
+      padding: 15px 15px 8px;
+      background-color: #f1f1f1;
+      width: 325px;
+      h3{
+        color: black;
+        font-size: 18px;
+        margin:0px;
+
+      }
+      .numberHdr{
+        background: gray;
+        color: white;
+        -webkit-border-radius: 50%;
+        -moz-border-radius:50%;
+        -ms-border-radius:50%;
+        border-radius:50%;
+        padding: 5px 8px;
+        font-size: 10px;
+      }
+      .baseCont{
+        margin-top: 15px;
+        a{
+          display: block;
+          width: 100%;
+        }
+        h5 {
+            font-size: 12px;
+            margin-bottom: 5px;
+
+        }
+        .baseContItem{
+          background-color: white;
+          padding: 5px;
+          //overflow: auto;
+          margin-bottom: 8px;
+          overflow: scroll;
+          overflow-x: hidden;
+
+          span{
+            display: block;
+            border-left:1px solid #cc781f;
+            -webkit-transition: 0.2s;
+            -moz-transition:0.2s;
+            -ms-transition:0.2s;
+            transition:0.2s;
+            margin-bottom: 5px;
+            padding-left: 5px;
+
+            &:hover,&:focus,&:active{
+              border-left-width: 3px;
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+}
+
+
+@media only screen and (max-width : 990px) {
+  // Styles pour cette Media Queries
+    .sidebar{
+
+      li{
+        font-size: 11px;
+        i{
+          font-size: 15px;
+        }
+      }
+      .nav-sideBar  {
+        li{
+          padding: 5px;
+          i{
+            top: 2px;
+          }
+        }
+      }
+      .contRef{
+        .dropdown-menu {
+          left: inherit;
+          right:100%;
+        }
+      }
+      .profil-picture {
+        width: 35px;
+        height: 35px;
+      }
+      .profil-collapse{
+        p{
+          font-size: 10px;
+        }
+      }
+    }
+    .contRef{
+      .dropdown-menu {
+        top: -113px !important;
+        header{
+          h3{
+          // font-size: 14px;
+
+          }
+        }
+
+      }
+    }
+}
+
